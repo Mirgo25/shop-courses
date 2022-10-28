@@ -1,11 +1,11 @@
  <nav>
     <div class="nav-wrapper">
-      <a href="/" class="brand-logo">Courses Shop</a>
+      <a href="/" class="brand-logo">Courses Shop</a>s
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         {{#if isHome}}
-            <li class="active"><a href="/">Home</a></li>
+            <li class="active"><a href="/"><i class="material-icons">home</i></a></li>
         {{else}}
-            <li><a href="/">Home</a></li>
+            <li><a href="/"><i class="material-icons">home</i></a></li>
         {{/if}}
         
         {{#if isCourses}}
@@ -35,25 +35,23 @@
             {{/if}}
 
             {{#if isProfile}}
-                <li class="active"><a href="/profile">Profile</a></li>
+                <li class="active"><a href="/profile"><i class="material-icons">account_circle</i></a></li>
             {{else}}
-                <li><a href="/profile">Profile</a></li>
+                <li><a href="/profile"><i class="material-icons">account_circle</i></a></li>
             {{/if}}
 
-            <li><a href="/auth/logout">Log out</a></li>
+            <li><a href="/auth/logout"><i class="material-icons">logout</i></a></li>
             
         {{else}}
 
             {{#if isLogin}}
-                <li class="active"><a href="/auth/login#login">Log in</a></li>
+                <li class="active"><a href="/auth/login#login"><i class="material-icons">login</i></a></li>
             {{else}}
-                <li><a href="/auth/login#login">Log in</a></li>
+                <li><a href="/auth/login#login"><i class="material-icons">login</i></a></li>
             {{/if}}
 
         {{/if}}
 
-        
-        
       </ul>
     </div>
 </nav>  
