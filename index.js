@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+require('dotenv').config()
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const helmet = require('helmet');
@@ -22,7 +23,6 @@ const profileRoutes = require('./routes/profile');
 // const User = require('./models/user');
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
-const keys = require('./keys');
 const errorHandler = require('./middleware/error');
 const fileMiddleware = require('./middleware/file');
 
@@ -39,7 +39,7 @@ const hbs = exphbs.create({
 
 const store = new MongoStore({
     collection: 'sessions',
-    uri: keys.MONGODB_URI,
+    uri: process.env.MONGODB_URI,
 
 });
 
@@ -73,7 +73,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use(express.urlencoded({extended: true}));
 app.use(session({
-    secret: keys.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store
@@ -112,7 +112,7 @@ const PORT = process.env.PORT || 3000;
 
 async function start() {
     try {
-        await mongoose.connect(keys.MONGODB_URI, {useNewUrlParser: true});
+        await mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
 
         // Створюємо юзера
         // const candidate = await User.findOne();

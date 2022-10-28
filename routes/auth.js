@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const {validationResult} = require('express-validator');
 const User = require('../models/user');
-const keys = require('../keys');
+require('dotenv').config();
 const regEmail = require('../emails/registration');
 const resetEmail = require('../emails/reset');
 const {registerValidators, loginValidators} = require('../utils/validators');
@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: 'mirgo2513@gmail.com',
-      pass: keys.GMAIL_APP_KEY // naturally, replace both with your real credentials or an application-specific password
+      pass: process.env.GMAIL_APP_KEY // naturally, replace both with your real credentials or an application-specific password
     }
   });
 
