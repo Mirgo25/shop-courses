@@ -1,5 +1,8 @@
 const express = require('express');
 const path = require('path');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger/openapi.yaml');
 require('dotenv').config()
 const csrf = require('csurf');
 const flash = require('connect-flash');
@@ -95,6 +98,8 @@ app.use(compression());
 app.use(varMiddleware);
 app.use(userMiddleware);
 
+// Підключаємо Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Реєструємо роути додатка
 app.use('/', homeRoutes);
