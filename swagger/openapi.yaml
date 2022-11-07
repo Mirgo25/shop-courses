@@ -1,0 +1,192 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Courses Shop API
+  description: A simple Express Courses Shop API
+servers:
+  - url: http://localhost:3000/
+    description: Local Server for developing
+  - url: https://sleepy-shelf-84718.herokuapp.com/
+    description: Heroku server (production)
+
+paths:
+  # GET all Courses
+  /courses:
+    get:
+      operationId: getAllCourses
+      summary: Returns a list of courses
+      description: All courses in the shop
+      tags:
+        - Courses
+      responses:
+        '200': 
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 100
+                items: 
+                  $ref: '#/components/schemas/Course'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  
+  /courses/{id}/edit:
+    parameters:  # Parameters for all path's methods
+      - $ref: '#/components/parameters/id'
+
+    get:
+      operationId: getCourseByIdForEdit
+      summary: Returns a course for editing
+      description: Course for edit
+      parameters:
+        - $ref: '#/components/parameters/allow'
+      tags:
+        - Courses
+      responses:
+        '200': 
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /courses/id-{id}:
+    parameters:  # Parameters for all path's methods
+      - $ref: '#/components/parameters/id'
+
+    get:
+      operationId: getCourseById
+      summary: Returns a course by ID
+      description: Course by ID
+      tags:
+        - Courses
+      responses:
+        '200': 
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /add:
+    post:
+      parameters:
+        - in: header
+          name: X-XSRF-TOKEN
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:          # <!--- form field name
+                  type: string
+                price:    # <!--- form field name
+                  type: number
+                img:          # <!--- form field name
+                  type: string
+      operationId: editCourse
+      summary: Returns a new course
+      description: New course
+      tags:
+        - Add new courses
+      responses:
+        '200': 
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  # Reusable schemas (data models)
+  schemas:
+
+    # Schema for error response body
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      required:
+        - code
+        - message
+    
+    # Schema for Course 
+    Course:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Python
+        price:
+          type: number
+          example: 100
+        img:
+          type: string
+          example: https://encrypted-tbn0.gstatic.com/images?q&#x3D;tbn:ANd9GcQNsWNdN8bimV8v3tDEkHhNzIyJMAEMhNZDaw&amp;usqp&#x3D;CAU
+        ueerID:
+          type: object
+          additionalProperties: true
+          example: Some user
+      required:
+        - title
+        - price
+
+  # Reusable path, query, header and cookie parameters
+  parameters:
+    id:
+      in: path
+      name: id
+      required: true
+      schema: 
+        type: string
+      description: The course ID
+      example: 634848c8907fea23d003390f
+    allow:
+      in: query
+      name: allow
+      required: true
+      schema:
+        type: boolean
+      description: If false, endpoint will redirect to home page
+      example: true
+
+  # Reusable responses
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    basicAuth:     # <-- arbitrary name for the security scheme
+      type: http
+      scheme: basic
+
+security:
+  - basicAuth: []
+
